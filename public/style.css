@@ -417,3 +417,106 @@ body {
   display: block;
 }
 
+/* Button Styling */
+.create_room, .join__room, .exit__btn, .rules__button, .results__button {
+  background-color: #04AA6D;
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 8px;
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+  transition-duration: 0.4s;
+}
+
+.create_room:hover, .join__room:hover, .exit__btn:hover, .rules__button:hover, .results__button:hover {
+  background-color: #009dff;
+  box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+}
+
+.exit__btn {
+  background-color: #f44336; /* Red */
+}
+
+.exit__btn:hover {
+  background-color: #d32f2f;
+}
+
+.results__button {
+  background-color: #555555; /* Dark Gray */
+  padding: 10px 24px;
+  font-weight: bold;
+}
+
+/* Player Name Display Styling */
+.opponent-name, .player-status {
+  background-color: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 4px;
+  margin: 10px 0;
+  font-weight: bold;
+  text-align: center;
+}
+
+.waiting-message {
+  color: #ff9800;
+  font-weight: bold;
+  text-align: center;
+  margin: 15px 0;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% { opacity: 0.6; }
+  50% { opacity: 1; }
+  100% { opacity: 0.6; }
+}
+
+/* Input Field Styling */
+#player-name, #room-id {
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  width: 100%;
+  font-size: 16px;
+}
+
+/* Game Result Styling */
+.results__heading {
+  font-size: 28px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 15px;
+}
+
+.your__result, .opponents__result {
+  background-color: rgba(0, 0, 0, 0.6);
+  color: white;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+/* Winner Highlight */
+.winner {
+  animation: winner-glow 1s ease-in-out infinite alternate;
+}
+
+@keyframes winner-glow {
+  from {
+    box-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #0D9276, 0 0 40px #0D9276;
+  }
+  to {
+    box-shadow: 0 0 20px #fff, 0 0 30px #0D9276, 0 0 40px #0D9276, 0 0 50px #0D9276;
+  }
+}
+
