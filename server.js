@@ -9,6 +9,15 @@ const PORT = process.env.PORT || 3000;
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+// Get the deployed URL from environment variables
+const deployedUrl =
+  "https://rock-paper-scissor-zeta-smoky.vercel.app/" || `localhost:${PORT}`;
+const isProduction = "production";
+const protocol = isProduction ? "https" : "http";
+const fullUrl = `${protocol}://${deployedUrl}`;
+
+console.log(`Server running with URL: ${fullUrl}`);
+
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.static(path.join(__dirname, "view")));
 app.use(express.static(path.join(__dirname, "images")));

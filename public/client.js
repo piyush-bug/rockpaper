@@ -84,10 +84,13 @@ let opponentPlayerName = "";
 let playerHasChosen = false;
 let opponentHasChosen = false;
 
-// Socket connection
+// Socket connection - using dynamic origin for deployment compatibility
 const socket = io.connect(window.location.origin, {
   secure: true,
   transports: ["websocket", "polling"],
+  reconnection: true,
+  reconnectionAttempts: 5,
+  reconnectionDelay: 1000,
 });
 
 const createRoom = () => {
@@ -392,4 +395,18 @@ socket.on("player2Left", () => {
     alert(`${opponentPlayerName} left the game`);
     returnToLogin();
   }
+});
+
+// Handle connection errors
+socket.on("connect_error", (error) => {
+  console.error("Connection error:", error);
+  alert("Connection error. Please refresh the page and try again.");
+});
+
+socket.on("reconnect", (attemptNumber) => {
+  console.log("Reconnected after", attemptNumber, "attempts");
+});
+
+socket.on("reconnect_error", (error) => {
+  console.error("Reconnection error:", error);
 });
