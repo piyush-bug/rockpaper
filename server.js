@@ -11,7 +11,8 @@ const __dirname = path.dirname(__filename);
 
 // Get the deployed URL from environment variables
 const deployedUrl =
-  "https://rock-paper-scissor-zeta-smoky.vercel.app/" || `localhost:${PORT}`;
+  "rock-paper-scissor-ogtwym2h6-piyush-bugs-projects.vercel.app" ||
+  `localhost:${PORT}`;
 const isProduction = "production";
 const protocol = isProduction ? "https" : "http";
 const fullUrl = `${protocol}://${deployedUrl}`;
