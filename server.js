@@ -12,10 +12,7 @@ const __dirname = path.dirname(__filename);
 
 // Get the deployed URL from environment variables
 const deployedUrl =
-  process.env.VERCEL_URL ||
-  process.env.URL ||
-  process.env.DEPLOY_URL ||
-  `localhost:${PORT}`;
+  "rock-paper-scissor-zeta-smoky.vercel.app" || `localhost:${PORT}`;
 const isProduction = process.env.NODE_ENV === "production";
 const protocol = isProduction ? "https" : "http";
 const fullUrl = `${protocol}://${deployedUrl}`;
