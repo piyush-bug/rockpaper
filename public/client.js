@@ -88,14 +88,12 @@ let opponentHasChosen = false;
 const serverUrl = window.location.origin;
 console.log("Connecting to server at:", serverUrl);
 
-// Socket connection with explicit server URL
-const socket = io(serverUrl, {
+// Update the socket connection code
+const socket = io({
   secure: true,
-  transports: ["websocket", "polling"],
   reconnection: true,
   reconnectionAttempts: 5,
   reconnectionDelay: 1000,
-  path: "/socket.io",
 });
 
 const createRoom = () => {

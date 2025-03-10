@@ -10,12 +10,10 @@ const PORT = process.env.PORT || 3000;
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Get the deployed URL from environment variables
-const deployedUrl =
-  "rockpaper-piyush-bugs-projects.vercel.app" || `localhost:${PORT}`;
-const isProduction = process.env.NODE_ENV === "production";
-const protocol = isProduction ? "https" : "http";
-const fullUrl = "https://rockpaper-piyush-bugs-projects.vercel.app/";
+// Add this code instead
+const fullUrl = process.env.VERCEL_URL
+  ? `https://${process.env.VERCEL_URL}`
+  : `http://localhost:${PORT}`;
 
 console.log(`Server running with URL: ${fullUrl}`);
 
@@ -40,10 +38,10 @@ app.get("*", (req, res) => {
 
 const server = http.createServer(app);
 
-// Configure Socket.io with CORS for deployment
+// Update the Socket.io configuration
 const io = new Server(server, {
   cors: {
-    origin: fullUrl, // Use the full URL for CORS
+    origin: "*", // Allow all origins in production
     methods: ["GET", "POST"],
     credentials: true,
   },
