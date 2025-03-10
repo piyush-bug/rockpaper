@@ -15,7 +15,7 @@ const deployedUrl =
   "rock-paper-scissor-zeta-smoky.vercel.app" || `localhost:${PORT}`;
 const isProduction = process.env.NODE_ENV === "production";
 const protocol = isProduction ? "https" : "http";
-const fullUrl = `${protocol}://${deployedUrl}`;
+const fullUrl = "https://rock-paper-scissor-zeta-smoky.vercel.app/";
 
 console.log(`Server running with URL: ${fullUrl}`);
 
