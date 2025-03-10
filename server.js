@@ -12,10 +12,10 @@ const __dirname = path.dirname(__filename);
 
 // Get the deployed URL from environment variables
 const deployedUrl =
-  "rock-paper-scissor-zeta-smoky.vercel.app" || `localhost:${PORT}`;
+  "rock-paper-scissor-theta-three.vercel.app" || `localhost:${PORT}`;
 const isProduction = process.env.NODE_ENV === "production";
 const protocol = isProduction ? "https" : "http";
-const fullUrl = "https://rock-paper-scissor-zeta-smoky.vercel.app/";
+const fullUrl = "https://rock-paper-scissor-theta-three.vercel.app/";
 
 console.log(`Server running with URL: ${fullUrl}`);
 
