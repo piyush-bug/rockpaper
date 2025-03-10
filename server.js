@@ -2,6 +2,7 @@ import express from "express";
 import path from "path";
 import { fileURLToPath } from "url";
 import { Server } from "socket.io";
+import http from "http";
 
 const app = express();
 
@@ -11,24 +12,46 @@ const __dirname = path.dirname(__filename);
 
 // Get the deployed URL from environment variables
 const deployedUrl =
-  "rock-paper-scissor-ogtwym2h6-piyush-bugs-projects.vercel.app" ||
+  process.env.VERCEL_URL ||
+  process.env.URL ||
+  process.env.DEPLOY_URL ||
   `localhost:${PORT}`;
-const isProduction = "production";
+const isProduction = process.env.NODE_ENV === "production";
 const protocol = isProduction ? "https" : "http";
 const fullUrl = `${protocol}://${deployedUrl}`;
 
 console.log(`Server running with URL: ${fullUrl}`);
 
+// Middleware to make full URL available in requests
+app.use((req, res, next) => {
+  req.fullUrl = req.protocol + "://" + req.get("host") + req.originalUrl;
+  next();
+});
+
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.static(path.join(__dirname, "view")));
 app.use(express.static(path.join(__dirname, "images")));
 
-app.get("/", (req, res, next) => {
+app.get("/", (req, res) => {
   res.sendFile("index.html", { root: __dirname });
 });
 
-const server = app.listen(PORT);
-const io = new Server(server);
+// For handling SPA routing
+app.get("*", (req, res) => {
+  res.sendFile("index.html", { root: __dirname });
+});
+
+const server = http.createServer(app);
+
+// Configure Socket.io with CORS for deployment
+const io = new Server(server, {
+  cors: {
+    origin: fullUrl, // Use the full URL for CORS
+    methods: ["GET", "POST"],
+    credentials: true,
+  },
+  path: "/socket.io",
+});
 
 let room = {};
 
@@ -37,6 +60,14 @@ io.on("connection", (socket) => {
 
   socket.on("disconnect", () => {
     console.log("Client disconnected");
+    // Clean up any rooms this socket was in
+    for (const roomId in room) {
+      const roomSize = io.sockets.adapter.rooms.get(roomId)?.size || 0;
+      if (roomSize === 0) {
+        delete room[roomId];
+        console.log(`Room ${roomId} deleted due to all players disconnecting`);
+      }
+    }
   });
 
   socket.on("createRoom", (data) => {
@@ -60,6 +91,7 @@ io.on("connection", (socket) => {
 
     socket.join(roomID);
     socket.emit("playersConnected");
+    console.log(`Room ${roomID} created by ${playerName}`);
   });
 
   socket.on("joinRoom", (data) => {
@@ -86,6 +118,7 @@ io.on("connection", (socket) => {
 
     // Notify the room creator that an opponent has joined
     socket.to(roomID).emit("opponentJoined", { playerName: playerName });
+    console.log(`${playerName} joined room ${roomID}`);
   });
 
   socket.on("p1Choice", (data) => {
@@ -156,12 +189,12 @@ io.on("connection", (socket) => {
     }
 
     // Check if room is empty after player leaves
-    const roomSize = io.sockets.adapter.rooms.get(roomID)?.size || 0;
-    if (roomSize <= 1) {
-      delete room[roomID]; // Clean up room data if empty
-    }
-
     socket.leave(roomID);
+    const roomSize = io.sockets.adapter.rooms.get(roomID)?.size || 0;
+    if (roomSize === 0) {
+      delete room[roomID]; // Clean up room data if empty
+      console.log(`Room ${roomID} deleted after player exit`);
+    }
   });
 });
 
@@ -196,4 +229,7 @@ const declareWinner = (roomID) => {
   });
 };
 
-console.log(`Server running on port ${PORT}`);
+// Start the server
+server.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
